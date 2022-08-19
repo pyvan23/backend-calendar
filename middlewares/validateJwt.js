@@ -1,42 +1,30 @@
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
+const validateJWT = (req, res, next) => {
+  //x-token headers
 
+  const token = req.header("x-token");
 
-const validateJWT = (req,res,next) => {
+  if (!token) {
+    return res.status(401).json({
+      ok: false,
+      msg: "no token in the header",
+    });
+  }
+  try {
+    const { uid, name } = jwt.verify(token, process.env.SECRET_JWT_SEED);
+    
+    req.uid = uid;
+    req.name = name;
 
-    //x-token headers
+  } catch (error) {
+    return res.status(401).json({
+      ok: false,
+      msg: "token invalid",
+    });
+  }
 
-    const token = req.header('x-token')
+  next();
+};
 
-    if(!token){
-
-        return res.status(401).json({
-            ok:false,
-            msg:'no token in the header'
-        })
-        try {
-            
-            const payload =jwt.verify(token,process.env.SECRET_JWT_SEED)
-
-        } catch (error) {
-
-            return res.status(401).json({
-                ok:false,
-                msg:'token invalid'
-            })
-        }
-
-
-    }
-
-
-   
-
-    next()
-}
-
-
-
-
-
-module.exports = { validateJWT }
+module.exports = { validateJWT };
