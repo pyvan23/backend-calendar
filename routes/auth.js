@@ -25,6 +25,7 @@ router.post('/login',
         check('email','email is required').isEmail(),
         check('password','password must be have more than six characters').isLength({min:6}),
         validateFields,
+        
     ],logIn)
 
 router.get('/renew',validateJWT , reNewToken)
