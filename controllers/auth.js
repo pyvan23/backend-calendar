@@ -102,7 +102,7 @@ const logIn = async (req, res) => {
     ok: true,
     uid,name,
     token,
-    message: "renew",
+   
   });
 };
 
